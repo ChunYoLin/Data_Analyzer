@@ -24,6 +24,7 @@ for fname in os.listdir(DIR):
 all_data = np.asarray(all_data, np.float32)
 model = PCA(n_components = 2)
 model.fit(all_data) 
+plt.title(sys.argv[2])
 colormap = plt.cm.gist_ncar 
 colorst = [colormap(i) for i in np.linspace(0, 0.9, len(data_dict))]
 
@@ -36,4 +37,4 @@ recs = []
 for i in range(len(data_dict)):
         recs.append(mpatches.Rectangle((0,0), 1, 1, fc = colorst[i]))
 lgd = plt.legend(recs, classes, loc = 'center left', bbox_to_anchor = (1, 0.5))
-plt.savefig('compare.png', bbox_extra_artists = (lgd,), bbox_inches = 'tight')
+plt.savefig(sys.argv[2] + '.png', bbox_extra_artists = (lgd,), bbox_inches = 'tight')
