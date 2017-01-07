@@ -16,9 +16,12 @@ data_dict = {}
 for fname in os.listdir(DIR):
     with open(DIR + '/' + fname) as f:
         data = []
-        for vec in f.read().splitlines():
-            vec = vec.split()
-            data.append(vec)
+        for idx, vec in enumerate(f.read().splitlines()):
+            if idx < 300:
+                vec = vec.split()
+                data.append(vec)
+            else:
+                break
     all_data += data
     data_dict[os.path.splitext(fname)[0]] = np.asarray(data, np.float32)
 all_data = np.asarray(all_data, np.float32)
@@ -28,11 +31,13 @@ plt.title(sys.argv[2])
 colormap = plt.cm.gist_ncar 
 colorst = [colormap(i) for i in np.linspace(0, 0.9, len(data_dict))]
 
-for idx, (k, v) in enumerate(data_dict.iteritems()):
+for idx, (k, v) in enumerate(sorted(data_dict.items())):
     draw_data = model.transform(v)
     for ptidx, pt in enumerate(draw_data):
-        plt.scatter(pt[0], pt[1], c = colorst[idx])
+        plt.scatter(pt[0], pt[1], c = colorst[idx], alpha = 0.8)
 classes = data_dict.keys()
+classes.sort()
+
 recs = []
 for i in range(len(data_dict)):
         recs.append(mpatches.Rectangle((0,0), 1, 1, fc = colorst[i]))
